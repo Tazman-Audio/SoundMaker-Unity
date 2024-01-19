@@ -1,0 +1,18 @@
+{
+  "name": "com.tazmanaudio.soundmaker",
+  "version": "1.0.0",
+  "displayName": "Sound Maker",
+  "description": "",
+  "unity": "2020.3",
+  "unityRelease": "15f2",
+ "keywords": [
+    "audio",
+    "middleware",
+    "sound"
+  ],
+  "author": {
+    "name": "Tazman Audio",
+    "email": "anastasios.brakis@tazman-audio.co.uk",
+    "url": "https://www.tazman-audio.co.uk/soundmaker"
+  }
+}

@@ -1,0 +1,26 @@
+{
+    "name": "SoundMaker.Editor",
+    "rootNamespace": "",
+    "references": [
+        "SoundMaker.Runtime",
+        "UnityEngine",
+        "UnityEditor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.tazmanaudio.soundmaker",
+            "expression": "1",
+            "define": "GUI_ENABLED"
+        }
+    ],
+    "noEngineReferences": false
+}
