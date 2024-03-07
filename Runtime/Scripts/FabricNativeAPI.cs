@@ -298,6 +298,70 @@ namespace Fabric.Player
         }
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    public struct MIDIData
+    {
+        public int note;
+        public int velocity;
+    }
+
+    [StructLayout(LayoutKind.Explicit)]
+    public struct ParameterData
+    {
+        [FieldOffset(0)] public int intValue;
+        [FieldOffset(0)] public float floatValue;
+        [FieldOffset(0)] public IntPtr stringValue;
+        [FieldOffset(0)] public MIDIData midiValue;
+    }
+
+    public enum ParameterType
+    {
+        INT_TYPE,
+        FLOAT_TYPE,
+        STRING_TYPE,
+        MIDI_TYPE,
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public class EventParameter
+    {
+        public ParameterType type;
+        public ParameterData data;
+
+        static public EventParameter CreateFloat(float value)
+        {
+            EventParameter parameter = new EventParameter();
+            parameter.type = ParameterType.FLOAT_TYPE;
+            parameter.data.floatValue = value;
+            return parameter;
+        }
+
+        static public EventParameter CreateInt(int value)
+        {
+            EventParameter parameter = new EventParameter();
+            parameter.type = ParameterType.INT_TYPE;
+            parameter.data.intValue = value;
+            return parameter;
+        }
+
+        static public EventParameter CreateString(string value)
+        {
+            EventParameter parameter = new EventParameter();
+            parameter.type = ParameterType.STRING_TYPE;
+            parameter.data.stringValue = Marshal.StringToHGlobalAnsi(value);
+            return parameter;
+        }
+
+        static public EventParameter CreateMIDI(int note, int velocity)
+        {
+            EventParameter parameter = new EventParameter();
+            MIDIData midiData = new MIDIData { note = note, velocity = velocity };
+            parameter.type = ParameterType.MIDI_TYPE;
+            parameter.data = new ParameterData { midiValue = midiData };
+            return parameter;
+        }
+    }
+
     public static class API
     {
         [DllImport(Plugin.PLUGIN_NAME, EntryPoint = "FabricIsInitialized", CallingConvention = CallingConvention.Cdecl)]
@@ -334,15 +398,8 @@ namespace Fabric.Player
         [DllImport(Plugin.PLUGIN_NAME, EntryPoint = "FabricSaveToMemory", CallingConvention = CallingConvention.Cdecl)]
         extern static public IntPtr SaveToMemory(UInt64 FabricInstanceId, StringBuilder buffer, ref int bufLen);
 
-
         [DllImport(Plugin.PLUGIN_NAME, EntryPoint = "FabricPostEvent", CallingConvention = CallingConvention.Cdecl)]
-        extern static public void PostEvent(UInt64 FabricInstanceId, UInt64 fpkId, [MarshalAs(UnmanagedType.LPStr)]string eventName, EventAction eventAction, int gameObjectId, int playingId = -1, EventCallback callback = null);
-
-        [DllImport(Plugin.PLUGIN_NAME, EntryPoint = "FabricPostEventParameter", CallingConvention = CallingConvention.Cdecl)]
-        extern static public void PostEvent(UInt64 FabricInstanceId, UInt64 fpkId, [MarshalAs(UnmanagedType.LPStr)]string eventName, EventAction eventAction, int gameObjectId, [MarshalAs(UnmanagedType.LPStr)]string parameter, int playingId = -1);
-
-        [DllImport(Plugin.PLUGIN_NAME, EntryPoint = "FabricPostEventValue", CallingConvention = CallingConvention.Cdecl)]
-        extern static public void PostEvent(UInt64 FabricInstanceId, UInt64 fpkId, [MarshalAs(UnmanagedType.LPStr)]string eventName, EventAction eventAction, int gameObjectId, float value, int playingId = -1);
+        extern static public void PostEvent(UInt64 FabricInstanceId, UInt64 fpkId, [MarshalAs(UnmanagedType.LPStr)]string eventName, EventAction eventAction, int gameObjectId, EventParameter eventParameter = null, int playingId = -1, EventCallback callback = null);
 
         [DllImport(Plugin.PLUGIN_NAME, EntryPoint = "FabricSetParameter", CallingConvention = CallingConvention.Cdecl)]
         extern static public void SetParameter(UInt64 FabricInstanceId, UInt64 fpkId, [MarshalAs(UnmanagedType.LPStr)]string eventName, [MarshalAs(UnmanagedType.LPStr)]string parameterName, int gameObjectId, float value, int playingId = -1);

@@ -13,6 +13,7 @@ namespace Fabric.Native
         // Trigger event
         PlaySound,
         PlayScheduled,
+        PlayMIDI,
         StopSound,
         StopScheduled,
         PauseSound,

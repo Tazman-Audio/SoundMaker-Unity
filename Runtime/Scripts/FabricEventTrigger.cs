@@ -46,11 +46,11 @@ namespace Fabric.Player
                     eventAction.eventAction == Native.EventAction.SetFadeIn ||
                     eventAction.eventAction == Native.EventAction.SetFadeOut)
                 {
-                    API.PostEvent(FabricPlayer.Instance.fabricPlayerInstanceId, fpkID, eventName, eventAction.eventAction, audioObject.ID, eventAction.floatValue);
+                    API.PostEvent(FabricPlayer.Instance.fabricPlayerInstanceId, fpkID, eventName, eventAction.eventAction, audioObject.ID, EventParameter.CreateFloat(eventAction.floatValue));
                 }
                 else if (eventAction.eventAction == Native.EventAction.SetSwitch)
                 {
-                    API.PostEvent(FabricPlayer.Instance.fabricPlayerInstanceId, fpkID, eventName, eventAction.eventAction, audioObject.ID, eventAction.stringValue);
+                    API.PostEvent(FabricPlayer.Instance.fabricPlayerInstanceId, fpkID, eventName, eventAction.eventAction, audioObject.ID, EventParameter.CreateString(eventAction.stringValue));
                 }
                 else
                 {
